@@ -74,22 +74,20 @@ pipelines:
           inputResources:
             - name: gitRepo_code
               trigger: false
-            - name: gradle_fileSpec
-              trigger: false
           integrations:
             - name: Artifactory
         execution:
           onStart:
           # export artifactory ip from internal build env var to tag the docker image
             - export domain=$(echo ${int_Artifactory_url} | awk -F[/:] '{print $4}' )
-            - export Fullimagename="${domain}/docker-demo/gradle-app"
+            - export Fullimagename="${domain}/docker-demo-dev-local/gradle-app"
 
 
       - name: Gradle_docker_push
         type: DockerPush
         configuration:
           affinityGroup: dock1
-          targetRepository: docker-demo
+          targetRepository: docker-demo-dev-local
           autoPublishBuildInfo: true
           integrations:
             - name: Artifactory
